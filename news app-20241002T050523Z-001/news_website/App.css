@@ -1,0 +1,65 @@
+
+*
+{
+font: size 110%;
+
+}
+
+.navbar.bg-dark .navbar-nav .nav-item .nav-link.active-link {
+  background-color: orange;
+}
+
+
+.navbar-nav a:hover {
+  color: aqua !important;
+}
+
+.nav-link:hover {
+  color: aqua !important;
+}
+
+.menu_Active
+{
+font-weight: bold;
+border-bottom: 1px solid #565387;
+
+
+}
+
+.input-field {
+border: 1px solid #ccc;
+box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  width: 30%;
+  padding: 10px;
+  font-size:105%;
+  margin: 8px;
+}
+
+.header {
+  padding: 10px;
+  width: 20%;
+  height: 200%;
+  font-size: 200%;
+  color: orangered;
+  background-color: #020382;
+  border-radius:50px;
+}
+
+
+
+
+.nav
+{
+font-size:20%;
+background-color:black;
+}
+
+.nav a
+{
+
+color:white;
+text-decoaration:none;
+margin:5%;
+}

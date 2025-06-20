@@ -1,0 +1,296 @@
+import Navbar from "./Navbar";
+import{useNavigate}from "react-router-dom";
+import{useState,useEffect} from "react";
+import React from "react"
+
+const Hero = ({ cat }) =>{
+const navigate = useNavigate();
+const[user,setUser]=useState("");
+useEffect(()=>{
+const un=localStorage.getItem("un");
+if(un==null)
+{
+navigate("/login");
+}
+else
+{	
+setUser(un);
+}
+
+},[]);
+
+  return(
+    <>
+<Navbar/>
+    <div className="container-fluid bg-dark text-white d-flex justify-content-center align-items-center flex-column" style={{height:"50vh"}}>
+   <h2 style={{fontSize:"50px",color :"orangered" }}>NEWS HUB</h2>
+   <h5 style={{textAlign:"center"}}> THE WHOLE WEBSITE BUILT WITH NEWS API</h5>
+	<center>
+	<h1 style={{textAlign:"center",fontSize:"100%",color :"orangered",height:"90%",backgroundColor:"white",borderRadius:"19px",width:"120%"}}>{ user }</h1>
+	
+</center>
+</div>
+    </>
+  );
+};
+export default Hero;
+
+
+
+
+
+import React, { useEffect, useState } from "react";
+import Navbar from "./Navbar";
+import{useNavigate}from "react-router-dom";
+import axios from "axios";
+
+const Fetchdata = ({ cat }) =>{
+const[Data,setData]=useState("");
+  const nav=useNavigate();
+
+const countries = {
+    "India": "in", "USA": "us", "UK": "gb"
+};
+const [selectedCountry, setSelectedCountry] = useState("in");
+const handleRadioChange = (event) => {
+    setSelectedCountry(event.target.value);
+  };
+  
+  const fetchData=async()=>{
+    let url = `https://newsapi.org/v2/top-headlines?country=${selectedCountry}&apiKey=f3154bad80974957ad55615e95dbed29`;
+
+    if (cat) {
+        url += "&category=" + cat;
+    }
+    
+    
+    await axios.get(url)
+    .then((res)=>setData(res.data.articles));
+
+  };
+const lo = () => {
+    localStorage.removeItem("un");
+    nav("/login");
+  };
+useEffect(()=>{fetchData()},[selectedCountry,cat]);
+useEffect(()=>{
+const un=localStorage.getItem("un");
+if(un==null)
+{
+nav("/login");
+
+}
+
+
+
+},[]);
+ return(
+    <>
+{cat && (
+<center>
+        <Navbar />
+
+</center>
+ )}
+      
+
+    
+   <div className="container text-center   my-4"><h3 style={{textAlign:"center",fontSize:"150%",color :"orangered",height:"100%",backgroundColor:"black",borderRadius:"19px",width:"107%"}}>TOP HEADLINES</h3> </div>
+   <div className="container d-flex justify-content-center align-item-center flex-column  my-3"style={{minHeight:"100vh"}}>
+<div className="container my-4 d-flex justify-content-center">
+          {Object.keys(countries).map((country) => (
+            <div style={{display: 'inline-block', margin: '110px'}} key={country}>
+              <input type="radio"style={{width: '30px', height: '30px'}} value={countries[country]} checked={selectedCountry === countries[country]} onChange={handleRadioChange} />
+              <label>{country}</label>
+            </div>
+          ))}
+</div>
+  
+	
+   
+   
+
+   
+
+   {Data ? Data.map((items,index)=>(
+    <>
+      <div className="container my-3  p-3 "  style={{width:"1100px",boxShadow:"2px 2px 10px silver", borderRadius:"10px", backgroundColor: 'white'}} >
+       
+  
+		<h5 className="my-1 text-center">{items.title}</h5>
+          <div className="d-flex justify-content-center align-item-center"><img src={items.urlToImage} alt="/" className="img-fluid " style={{width:"auto",height:"auto",objectFit:"cover",}}  /></div>
+          
+          <p className="my-1 text-center">{items.content}</p>
+	
+          <a href={items.url} target="blank">READ MORE</a>
+	
+          <hr style={{width:"100%",height:"100%",color:"red"}}></hr>
+          <br/><br/><br/>
+      </div>
+   </>
+   )) :"loading"}
+   
+
+</div>
+
+{cat && (
+<center>
+<form onSubmit={lo}>
+<input type="submit" value="Logout"/>
+</form>
+</center>
+)}
+      
+       </>
+  );
+};
+export default Fetchdata;
+
+
+
+
+<Link class="nav-link active text-white" aria-current="page" to="/home">
+
+
+
+import React, { useState } from "react"
+import { Link } from "react-router-dom";
+export const Navbar = () =>{
+  const un=localStorage.getItem("un");
+const [activeLink, setActiveLink] = useState("");
+
+  const handleClick = (link) => {
+    setActiveLink(link);
+  };
+  return (
+  <div><nav class="navbar navbar-expand-lg bg-dark">
+  <div class="container-fluid">
+    <Link class="navbar-brand text-white" to="/"><h5>NEWS HUB</h5></Link>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+       {(un==null)&&(<Link class="nav-link active text-white" aria-current="page" to="/login">LOGIN</Link>)}
+        </li>
+	<li class="nav-item">
+       {(un==null)&&(<Link class="nav-link active text-white" aria-current="page" to="/signup">SIGNUP</Link>)}
+        </li>
+	<li class="nav-item">
+       {(un==null)&&(<Link class="nav-link active text-white" aria-current="page" to="/fp">FORGOTPASSWORD</Link>)}
+        </li>
+	
+        
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/home">Home</Link>)}
+        </li>
+        <li class="nav-item">
+  {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/general">General</Link>)}
+        </li> 
+        <li class="nav-item">
+        {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/business">Business</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/entertainment">Entertainment</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/health">Health</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/science">Science</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/sports">Sports</Link>)}
+        </li> <li class="nav-item">
+        {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/technology">Technology</Link>)}
+        </li>
+<li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/cp">CHANGEPASSWORD</Link>)}
+        </li>
+      </ul>
+     
+    </div>
+  </div>
+</nav></div>
+  );
+};
+
+export default Navbar;
+
+
+
+
+import React, { useState } from "react"
+import { Link } from "react-router-dom";
+export const Navbar = () =>{
+  const un=localStorage.getItem("un");
+const [activeLink, setActiveLink] = useState("");
+
+  const handleClick = (link) => {
+    setActiveLink(link);
+  };
+  return (
+  <div><nav class="navbar navbar-expand-lg bg-dark">
+  <div class="container-fluid">
+    <Link class="navbar-brand text-white" to="/"><h5>NEWS HUB</h5></Link>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+       {(un==null)&&(<Link class="nav-link active text-white" aria-current="page" to="/login">LOGIN</Link>)}
+        </li>-
+	<li class="nav-item">
+       {(un==null)&&(<Link class="nav-link active text-white" aria-current="page" to="/signup">SIGNUP</Link>)}
+        </li>
+	<li class="nav-item">
+       {(un==null)&&(<Link class="nav-link active text-white" aria-current="page" to="/fp">FORGOTPASSWORD</Link>)}
+        </li>
+	
+        
+        <li class="nav-item">
+       {(un!=null)&&(<Link class={`nav-link active text-white ${
+                      activeLink === "home" ? "bg-warning" : ""
+                    }`}
+                    onClick={() => handleClick("home")}
+                    to="/home"
+                  >Home</Link>)}
+        </li>
+        <li class="nav-item">
+  {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/general">General</Link>)}
+        </li> 
+        <li class="nav-item">
+        {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/business">Business</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/entertainment">Entertainment</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/health">Health</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/science">Science</Link>)}
+        </li>
+        <li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/sports">Sports</Link>)}
+        </li> <li class="nav-item">
+        {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/technology">Technology</Link>)}
+        </li>
+<li class="nav-item">
+       {(un!=null)&&(<Link class="nav-link active text-white" aria-current="page" to="/cp">CHANGEPASSWORD</Link>)}
+        </li>
+      </ul>
+     
+    </div>
+  </div>
+</nav></div>
+  );
+};
+
+export default Navbar;
+
+ 
+
+ 
